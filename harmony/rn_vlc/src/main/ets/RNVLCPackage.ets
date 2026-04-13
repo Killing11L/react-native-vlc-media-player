@@ -13,7 +13,28 @@
  * limitations under the License.
  */
 
-import { RNOHPackage } from '@rnoh/react-native-openharmony'
+import {
+  ComponentBuilderContext, RNOHPackage,
+} from '@rnoh/react-native-openharmony'
+import { RNC_VLC_TYPE, RNVLC } from './RNVLC'
+
+@Builder
+function buildRNVLCComponent(ctx: ComponentBuilderContext) {
+  Stack() {
+    if (ctx.componentName === RNC_VLC_TYPE) {
+      RNVLC({
+        ctx: ctx.rnComponentContext,
+        tag: ctx.tag
+      })
+    }
+  }
+  .position({ x: 0, y: 0 })
+}
 
 export class RNVLCPackage extends RNOHPackage {
+  createWrappedCustomRNComponentBuilderByComponentNameMap(): Map<string, WrappedBuilder<[ComponentBuilderContext]>> {
+    const map = new Map<string, WrappedBuilder<[ComponentBuilderContext]>>()
+    map.set(RNC_VLC_TYPE, wrapBuilder(buildRNVLCComponent))
+    return map
+  }
 }
